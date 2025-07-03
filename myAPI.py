@@ -10,6 +10,11 @@ class Item(BaseModel):
   price:float
   brand:Optional[str] = None
 
+class UpdateItem(BaseModel):
+  name:Optional[str] = None
+  price:Optional[str] = None
+  brand:Optional[str] = None
+  
 inventory={
   1:{
     "name":"Milk",
@@ -60,8 +65,43 @@ def createItem(*, item: Item, item_id: int):
     return {"Error":"This Id already Existed"}
   
   else:
+    #1st method : explicitly
     inventory[item_id] = {
       "name":item.name,
       "price":item.price
-    }
+    } 
+    
+    #2nd method :
+    # inventory[item_id] = item
     return inventory[item_id]
+  
+#Put : 
+@app.put("/update-item/{item_id}")
+def update_Item(item_id:int, item:UpdateItem):
+  if item_id not in inventory:
+    return {"Error":"This Id doesn't Exist"}
+  
+  if item.name!= None:
+    inventory[item_id].name = item.name
+    
+  if item.price!= None:
+    inventory[item_id].price = item.price
+    
+  if item.brand!= None:
+    inventory[item_id].brand = item.brand
+    
+  return inventory[item_id]
+
+
+#Delete :
+@app.delete("/delete-item/{item_id}")
+def deleteItem(item_id: int):
+  if item_id not in inventory:
+    return {"Error":"This Id doesn't Exist"}
+ 
+  del inventory[item_id]
+  
+  return{
+    "Success":"Item Deleted Successfully"
+  }
+  
