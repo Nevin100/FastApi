@@ -12,7 +12,7 @@ class Item(BaseModel):
 
 class UpdateItem(BaseModel):
   name:Optional[str] = None
-  price:Optional[str] = None
+  price:Optional[float] = None
   brand:Optional[str] = None
   
 inventory={
@@ -82,13 +82,13 @@ def update_Item(item_id:int, item:UpdateItem):
     return {"Error":"This Id doesn't Exist"}
   
   if item.name!= None:
-    inventory[item_id].name = item.name
+    inventory[item_id]["name"] = item.name
     
   if item.price!= None:
-    inventory[item_id].price = item.price
+    inventory[item_id]["price"] = item.price
     
   if item.brand!= None:
-    inventory[item_id].brand = item.brand
+    inventory[item_id]["brand"] = item.brand
     
   return inventory[item_id]
 
